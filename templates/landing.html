@@ -4,115 +4,398 @@
 {% block title %}NeuroTools - AI-Powered Tools for Productivity{% endblock %}
 
 {% block content %}
-<div class="bg-primary text-white py-5">
-    <div class="container">
+<!-- Hero Section with inline styles -->
+<div class="bg-primary text-white py-5" style="background: linear-gradient(-45deg, #6e48aa, #9d50bb, #4776E6, #8E54E9) !important; background-size: 400% 400% !important; animation: gradientBG 15s ease infinite !important; border-radius: 0 0 30px 30px / 30px !important;">
+    <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">AI-Powered Tools for Everyday Tasks</h1>
-                <p class="lead mb-4">Harness the power of artificial intelligence to streamline workflows, enhance learning, and improve your professional documents.</p>
+                <h1 class="display-4 fw-bold mb-3" style="font-size: 3.2rem !important;">Transform Your Workflow with AI</h1>
+                <p class="lead mb-4 pe-lg-5">Harness cutting-edge artificial intelligence to streamline tasks, enhance learning, and create professional-quality documents in seconds.</p>
                 {% if not user.is_authenticated %}
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+                <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-5">
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-4 me-md-2 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Get Started Free</a>
                     <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
                 </div>
                 {% else %}
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a href="#tools" class="btn btn-light btn-lg px-4 me-md-2">Explore Tools</a>
+                <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-5">
+                    <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Explore Tools</a>
                 </div>
                 {% endif %}
             </div>
             <div class="col-lg-6 d-none d-lg-block">
-                <img src="{% static 'images/chat.png' %}" alt="AI Tools Illustration" class="img-fluid rounded shadow">
+                <div style="animation: floating 3s ease-in-out infinite;">
+                    <img src="{% static 'images/chat.png' %}" alt="AI Tools Illustration" class="img-fluid rounded shadow-lg" style="border-radius: 1rem !important; box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;">
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Stats counter section -->
+<div class="container">
+    <div class="row g-4 py-5 text-center" style="margin-top: -40px;">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
+                <div class="card-body">
+                    {% comment %} <h2 class="fw-bold text-primary mb-0">10,000+</h2>
+                    <p class="text-muted mb-0">Active Users</p> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
+                <div class="card-body">
+                    {% comment %} <h2 class="fw-bold text-primary mb-0">50,000+</h2>
+                    <p class="text-muted mb-0">Documents Processed</p> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
+                <div class="card-body">
+                    {% comment %} <h2 class="fw-bold text-primary mb-0">4.9/5</h2>
+                    <p class="text-muted mb-0">User Satisfaction</p> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tools Section -->
 <div class="container py-5" id="tools">
-    <h2 class="text-center mb-5">Our AI-Powered Tools</h2>
+    <div class="text-center mb-5">
+        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Our Solutions</span>
+        <h2 class="display-5 fw-bold">Powerful AI Tools</h2>
+        <p class="lead text-muted col-lg-8 mx-auto">Choose from our suite of specialized AI tools designed to make your personal and professional life easier.</p>
+    </div>
     
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card tool-card h-100">
-                <div class="card-body text-center p-4">
-                    <div class="tool-icon">
+            <div class="card h-100" style="border: none; border-radius: 16px; transition: all 0.3s ease; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);">
+                <div class="card-body text-center p-5">
+                    <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #FF6B6B, #FF8E8E); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-book"></i>
                     </div>
-                    <h3 class="card-title">PDF Quiz Generator</h3>
-                    <p class="card-text">Transform any PDF into interactive quizzes. Perfect for students, teachers, and self-learners looking to reinforce knowledge.</p>
-                    <a href="{% url 'quiz_generator:index' %}" class="btn btn-primary mt-3">Generate Quiz</a>
+                    <h3 class="card-title fw-bold">PDF Quiz Generator</h3>
+                    <p class="card-text text-muted">Transform any PDF document into interactive quizzes with intelligent question generation. Perfect for students, teachers, and self-learners.</p>
+                    <div class="mt-4">
+                        <a href="{% url 'quiz_generator:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Generate Quiz</a>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4">
-            <div class="card tool-card h-100">
-                <div class="card-body text-center p-4">
-                    <div class="tool-icon">
+            <div class="card h-100" style="border: none; border-radius: 16px; transition: all 0.3s ease; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);">
+                <div class="card-body text-center p-5">
+                    <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #4776E6, #8E54E9); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-file-alt"></i>
                     </div>
-                    <h3 class="card-title">CV Reviewer</h3>
-                    <p class="card-text">Get professional feedback on your resume or CV. Our AI analyzes your document and provides actionable improvements.</p>
-                    <a href="{% url 'cv_reviewer:index' %}" class="btn btn-primary mt-3">Review CV</a>
+                    <h3 class="card-title fw-bold">CV Reviewer</h3>
+                    <p class="card-text text-muted">Get expert feedback on your resume or CV. Our AI analyzes your document and provides actionable improvements to help you land your dream job.</p>
+                    <div class="mt-4">
+                        <a href="{% url 'cv_reviewer:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Review CV</a>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4">
-            <div class="card tool-card h-100">
-                <div class="card-body text-center p-4">
-                    <div class="tool-icon">
+            <div class="card h-100" style="border: none; border-radius: 16px; transition: all 0.3s ease; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);">
+                <div class="card-body text-center p-5">
+                    <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-comments"></i>
                     </div>
-                    <h3 class="card-title">Document Chat</h3>
-                    <p class="card-text">Chat with your documents. Ask questions and get instant answers based on the content of your PDFs.</p>
-                    <a href="{% url 'document_chat:index' %}" class="btn btn-primary mt-3">Start Chatting</a>
+                    <h3 class="card-title fw-bold">Document Chat</h3>
+                    <p class="card-text text-muted">Chat with your documents. Upload any file and ask questions to instantly get answers based on your document's content.</p>
+                    <div class="mt-4">
+                        <a href="{% url 'document_chat:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Start Chatting</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Why Choose NeuroTools?</h2>
-        <div class="row g-4">
+<!-- Features Section -->
+<div class="py-5 my-5" style="background: linear-gradient(to bottom, #f8f9fa, #ffffff); border-radius: 50px; margin: 30px auto; box-shadow: 0 0 60px rgba(0, 0, 0, 0.03);">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Why NeuroTools</span>
+            <h2 class="display-5 fw-bold">Smart Technology, Better Results</h2>
+            <p class="lead text-muted col-lg-8 mx-auto">We combine state-of-the-art AI with intuitive design to help you accomplish more.</p>
+        </div>
+        
+        <div class="row g-5 mt-3">
             <div class="col-md-4 text-center">
-                <div class="feature-icon mx-auto">
+                <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-bolt"></i>
                 </div>
-                <h3>Fast & Efficient</h3>
-                <p>Our AI tools process your requests in seconds, saving you valuable time.</p>
+                <h3 class="fw-bold">Lightning Fast</h3>
+                <p class="text-muted">Our AI tools process your requests in seconds, not minutes, saving you valuable time on every task.</p>
             </div>
             <div class="col-md-4 text-center">
-                <div class="feature-icon mx-auto">
+                <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-lock"></i>
                 </div>
-                <h3>Secure & Private</h3>
-                <p>Your documents and data are processed securely and never stored longer than necessary.</p>
+                <h3 class="fw-bold">Bank-Level Security</h3>
+                <p class="text-muted">Your documents and data are encrypted and processed securely. We never store sensitive information longer than necessary.</p>
             </div>
             <div class="col-md-4 text-center">
-                <div class="feature-icon mx-auto">
+                <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3>Smart Technology</h3>
-                <p>Powered by state-of-the-art language models for accurate and intelligent responses.</p>
+                <h3 class="fw-bold">Intelligent Analysis</h3>
+                <p class="text-muted">Powered by advanced language models that understand context and provide meaningful, accurate insights.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} 
+<!-- Testimonials -->
+<div class="container py-5 my-5">
+    <div class="text-center mb-5">
+        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Testimonials</span>
+        <h2 class="display-5 fw-bold">What Our Users Say</h2>
+        <p class="lead text-muted col-lg-8 mx-auto">Join thousands of satisfied professionals and students using NeuroTools.</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
+                <div class="card-body p-4 position-relative">
+                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="card-text mb-4">"The PDF Quiz Generator has completely changed how I study. I can create practice questions from any textbook in seconds!"</p>
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <span class="fw-bold text-primary">JM</span>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="mb-0 fw-bold">Jamie Miller</h5>
+                            <small class="text-muted">Medical Student</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
+                <div class="card-body p-4 position-relative">
+                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="card-text mb-4">"The CV Reviewer tool provided insights I would have never considered. Got three interview calls after implementing the suggestions!"</p>
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <span class="fw-bold text-primary">AR</span>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="mb-0 fw-bold">Alex Rodriguez</h5>
+                            <small class="text-muted">Software Engineer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
+                <div class="card-body p-4 position-relative">
+                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="card-text mb-4">"Document Chat allows me to quickly get answers from long reports without reading through everything. Huge time-saver for my research!"</p>
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <span class="fw-bold text-primary">SP</span>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="mb-0 fw-bold">Sarah Patel</h5>
+                            <small class="text-muted">Research Analyst</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+<!-- CTA Section -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-white text-center p-5" style="background: linear-gradient(135deg, #6e48aa, #9d50bb); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden;">
+                <h2 class="display-5 fw-bold mb-4">Ready to boost your productivity?</h2>
+                <p class="lead mb-5">Join thousands of professionals and students who are already using NeuroTools to work smarter, not harder.</p>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Create Free Account</a>
+                {% else %}
+                <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Explore Tools</a>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-            <h2 class="mb-4">Ready to get started?</h2>
-            <p class="lead mb-5">Join thousands of professionals and students who are already using NeuroTools to enhance their productivity.</p>
-            {% if not user.is_authenticated %}
-            <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg px-5">Create Free Account</a>
-            {% else %}
-            <a href="#tools" class="btn btn-primary btn-lg px-5">Explore Tools</a>
-            {% endif %}
-        </div>
-    </div>
-</div>
+<!-- Simple animation for floating effect -->
+<!-- Animations for floating effect and scroll animations -->
+<style>
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes floating {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 40px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translate3d(-40px, 0, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translate3d(40px, 0, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale3d(0.8, 0.8, 0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale3d(1, 1, 1);
+        }
+    }
+    
+    .animated {
+        animation-duration: 0.8s;
+        animation-fill-mode: both;
+        visibility: hidden;
+    }
+    
+    .fadeInUp {
+        animation-name: fadeInUp;
+    }
+    
+    .fadeInLeft {
+        animation-name: fadeInLeft;
+    }
+    
+    .fadeInRight {
+        animation-name: fadeInRight;
+    }
+    
+    .zoomIn {
+        animation-name: zoomIn;
+    }
+    
+    .delay-1 {
+        animation-delay: 0.1s;
+    }
+    
+    .delay-2 {
+        animation-delay: 0.2s;
+    }
+    
+    .delay-3 {
+        animation-delay: 0.3s;
+    }
+    
+    .delay-4 {
+        animation-delay: 0.4s;
+    }
+    </style>
+    
+    <!-- Add scroll animation JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation classes to elements
+        const tools = document.querySelectorAll('.col-md-4');
+        tools.forEach((tool, index) => {
+            tool.classList.add('animated', 'fadeInUp', `delay-${index + 1}`);
+        });
+        
+        const stats = document.querySelectorAll('.stats-card');
+        stats.forEach((stat, index) => {
+            stat.classList.add('animated', 'zoomIn', `delay-${index + 1}`);
+        });
+        
+        const features = document.querySelectorAll('.feature-item');
+        features.forEach((feature, index) => {
+            if (index % 2 === 0) {
+                feature.classList.add('animated', 'fadeInLeft');
+            } else {
+                feature.classList.add('animated', 'fadeInRight');
+            }
+        });
+        
+        const testimonials = document.querySelectorAll('.testimonial-item');
+        testimonials.forEach((testimonial, index) => {
+            testimonial.classList.add('animated', 'fadeInUp', `delay-${index + 1}`);
+        });
+        
+        const cta = document.querySelector('.cta-container');
+        if (cta) {
+            cta.classList.add('animated', 'zoomIn');
+        }
+    
+        // Check if element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+                rect.bottom >= 0
+            );
+        }
+    
+        // Show animation when element enters viewport
+        function checkAnimations() {
+            const animatedElements = document.querySelectorAll('.animated');
+            animatedElements.forEach(element => {
+                if (isInViewport(element)) {
+                    element.style.visibility = 'visible';
+                }
+            });
+        }
+    
+        // Listen for scroll events
+        window.addEventListener('scroll', checkAnimations);
+        
+        // Check on initial load
+        checkAnimations();
+    });
+    </script>
+  
 {% endblock %}
