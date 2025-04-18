@@ -17,6 +17,7 @@ import tempfile
 import PyPDF2
 from groq import Groq
 from sentence_transformers import SentenceTransformer
+from transformers import AutoModel
 import faiss
 
 from .models import Document, ChatSession, Message, DocumentEmbedding
@@ -46,7 +47,8 @@ from functools import lru_cache
 @lru_cache()
 def load_embedding_model():
     """Load the sentence transformer model for embeddings."""
-    return SentenceTransformer("all-MiniLM-L6-v2")
+    return AutoModel.from_pretrained('jinaai/jina-embeddings-v2-base-en', trust_remote_code=True)
+    # return SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def extract_text_from_pdf(file_path):
