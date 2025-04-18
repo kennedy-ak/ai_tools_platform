@@ -42,7 +42,8 @@ class FAISSIndex:
         distances, indices = self.index.search(query_embedding, min(top_k, self.index.ntotal))
         return distances, indices
 
-
+from functools import lru_cache
+@lru_cache()
 def load_embedding_model():
     """Load the sentence transformer model for embeddings."""
     return SentenceTransformer("all-MiniLM-L6-v2")
