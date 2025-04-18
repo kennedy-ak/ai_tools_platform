@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiz Generator - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz_generator.css' %}">
+<style>
+    .quiz-card {
+        transition: transform 0.3s;
+        height: 100%;
+    }
+    .quiz-card:hover {
+        transform: translateY(-5px);
+    }
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+    }
+    .empty-icon {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h1 class="mb-0">PDF Quiz Generator</h1>
+            <p class="text-muted">Transform any PDF into interactive quizzes</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'quiz_generator:create_quiz' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i> Create New Quiz
+            </a>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% if quizzes %}
+            {% for quiz in quizzes %}
+            <div class="col-md-4">
+                <div class="card quiz-card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-primary">{{ quiz.get_difficulty_display }}</span>
+                            <small class="text-muted">{{ quiz.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        <h5 class="card-title">{{ quiz.title }}</h5>
+                        <p class="card-text text-muted small">
+                            {{ quiz.questions.count }} questions
+                        </p>
+                        <p class="card-text">
+                            {% if quiz.description %}
+                                {{ quiz.description|truncatechars:100 }}
+                            {% else %}
+                                <span class="text-muted">No description available</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'quiz_generator:view_quiz' quiz.id %}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> View
+                            </a>
+                            <a href="{% url 'quiz_generator:take_quiz' quiz.id %}" class="btn btn-success">
+                                <i class="fas fa-play me-1"></i> Take Quiz
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>No Quizzes Yet</h3>
+                    <p class="mb-4">Upload a PDF document to create your first quiz</p>
+                    <a href="{% url 'quiz_generator:create_quiz' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i> Create Your First Quiz
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if quizzes %}
+<div class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">How It Works</h2>
+        <div class="row">
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <h4>Upload PDF</h4>
+                <p>Upload any PDF document with educational content</p>
+            </div>
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h4>AI Generates Questions</h4>
+                <p>Our AI creates relevant questions from your document</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h4>Test Your Knowledge</h4>
+                <p>Take the quiz and reinforce your learning</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ document.title }} - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/document_chat.css' %}">
+<style>
+    .document-content {
+        max-height: 300px;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+    .chat-session-card {
+        transition: all 0.2s;
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .chat-session-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    .chat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    .create-chat-card {
+        background-color: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.2s;
+    }
+    .create-chat-card:hover {
+        border-color: #3498db;
+        background-color: #f0f9ff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'document_chat:index' %}">Document Chat</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ document.title }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ document.title }}</h2>
+                    <div>
+                        <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary me-2" target="_blank">
+                            <i class="fas fa-file-pdf me-1"></i> View PDF
+                        </a>
+                        <a href="{% url 'document_chat:delete_document' document.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt me-1"></i> Delete
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Uploaded:</strong> {{ document.created_at|date:"F j, Y, g:i a" }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>Document Preview</h5>
+                        <div class="document-content">
+                            {% if document.content_text %}
+                                {{ document.content_text|truncatechars:1000 }}
+                                {% if document.content_text|length > 1000 %}
+                                    <div class="text-center mt-3">
+                                        <em class="text-muted">Content truncated for preview</em>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <p class="text-muted">No text content available for preview.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5>Chat with this document</h5>
+                            <p class="text-muted">Ask questions and get instant answers based on this document's content.</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <a href="{% url 'document_chat:create_chat_session' document.id %}" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-2"></i> Start New Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mb-3">Recent Chat Sessions</h3>
+            
+            <div class="row g-4">
+                {% for session in chat_sessions %}
+                <div class="col-md-6">
+                    <div class="card chat-session-card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="chat-icon me-3">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">{{ session.title }}</h5>
+                                    <p class="text-muted mb-0 small">
+                                        Last active: {{ session.last_activity|date:"M d, Y, g:i a" }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {% with messages=session.messages.all|slice:":3" %}
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            {% if message.role == 'user' %}
+                                                <div class="d-flex mb-2">
+                                                    <div class="bg-light p-2 rounded-3 me-auto" style="max-width: 80%;">
+                                                        <small>{{ message.content|truncatechars:50 }}</small>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="d-flex mb-2">
+                                                    <div class="bg-primary text-white p-2 rounded-3 ms-auto" style="max-width: 80%;">
+                                                        <small>{{ message.content|truncatechars:50 }}</small>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-muted small">No messages yet. Start the conversation!</p>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-light text-dark">
+                                    <i class="fas fa-comment me-1"></i>
+                                    {{ session.messages.count }} messages
+                                </span>
+                                
+                                <a href="{% url 'document_chat:chat' session.id %}" class="btn btn-sm btn-outline-primary">
+                                    Continue Chat
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <a href="{% url 'document_chat:create_chat_session' document.id %}" class="text-decoration-none">
+                        <div class="create-chat-card">
+                            <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                            <h4>Start Your First Chat</h4>
+                            <p class="text-muted mb-0">Ask questions about this document</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">How to Use</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex mb-3">
+                        <div class="me-3">
+                            <div class="step-circle">1</div>
+                        </div>
+                        <div>
+                            <h5>Start a Chat</h5>
+                            <p class="text-muted">Create a new chat session for specific topics or questions</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="me-3">
+                            <div class="step-circle">2</div>
+                        </div>
+                        <div>
+                            <h5>Ask Questions</h5>
+                            <p class="text-muted">Ask anything about the document content</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="me-3">
+                            <div class="step-circle">3</div>
+                        </div>
+                        <div>
+                            <h5>Get AI Answers</h5>
+                            <p class="text-muted">AI will provide answers based on document content</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <div class="step-circle">4</div>
+                        </div>
+                        <div>
+                            <h5>View Source Citations</h5>
+                            <p class="text-muted">See exactly which parts of the document were used</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Example Questions</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Try asking questions like:</p>
+                    <div class="mb-2">
+                        <div class="example-question">
+                            <i class="fas fa-question-circle text-primary me-2"></i>
+                            What are the main points in this document?
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="example-question">
+                            <i class="fas fa-question-circle text-primary me-2"></i>
+                            Summarize the document in a few sentences.
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="example-question">
+                            <i class="fas fa-question-circle text-primary me-2"></i>
+                            What does the document say about [specific topic]?
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="example-question">
+                            <i class="fas fa-question-circle text-primary me-2"></i>
+                            Can you explain the concept of [term mentioned in document]?
+                        </div>
+                    </div>
+                    <div>
+                        <div class="example-question">
+                            <i class="fas fa-question-circle text-primary me-2"></i>
+                            What evidence supports [claim in document]?
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

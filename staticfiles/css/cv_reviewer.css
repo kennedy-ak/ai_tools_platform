@@ -1,0 +1,251 @@
+/* CV Reviewer App Styles */
+
+/* Review card styles */
+.review-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Score badge */
+.score-badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f9ff;
+    color: #3498db;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+}
+
+/* Job role badge */
+.job-role-badge {
+    display: inline-block;
+    background-color: #f0f9ff;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    color: #3498db;
+}
+
+/* Progress bars */
+.progress {
+    height: 5px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    background-color: #3498db;
+}
+
+/* Overview card for review details */
+.overview-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.overview-header {
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.overview-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #3498db;
+    background-image: linear-gradient(135deg, #3498db, #2980b9);
+    opacity: 0.9;
+    z-index: 0;
+}
+
+.overview-content {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+/* Score circle */
+.score-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.score-circle-inner {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.score-percent {
+    font-size: 2.2rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #3498db;
+}
+
+.score-text {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+/* Category scores */
+.category-score {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.category-score:hover {
+    transform: translateY(-2px);
+}
+
+.category-score-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.category-score-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Feedback sections */
+.feedback-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.feedback-section:last-child {
+    border-bottom: none;
+}
+
+.feedback-section h3 {
+    color: #3498db;
+    border-left: 4px solid #3498db;
+    padding-left: 10px;
+    margin-bottom: 1rem;
+}
+
+.feedback-section ul {
+    padding-left: 1.5rem;
+}
+
+.feedback-section li {
+    margin-bottom: 0.5rem;
+}
+
+.feedback-section p {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Form upload styles */
+.upload-section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Feature icons */
+.feature-icon {
+    background-color: #f8f9fa;
+    color: #3498db;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+    transition: all 0.3s;
+}
+
+.feature-icon:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.05);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 1rem;
+}
+
+/* Print styles */
+@media print {
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .navbar, .footer, .btn, nav {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    .overview-bg {
+        background: #f8f9fa !important;
+    }
+    
+    .overview-content {
+        color: #333 !important;
+    }
+    
+    .category-score {
+        background-color: #f8f9fa !important;
+        color: #333 !important;
+        border: 1px solid #ddd !important;
+    }
+}

@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CV Review Results - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cv_reviewer.css' %}">
+<style>
+    .overview-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .overview-header {
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .overview-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #3498db;
+        background-image: linear-gradient(135deg, #3498db, #2980b9);
+        opacity: 0.9;
+        z-index: 0;
+    }
+    .overview-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+    }
+    .score-circle {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    .score-circle-inner {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #3498db;
+    }
+    .score-percent {
+        font-size: 2.2rem;
+        font-weight: bold;
+        line-height: 1;
+    }
+    .score-text {
+        font-size: 0.8rem;
+        color: #7f8c8d;
+    }
+    .category-score {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    .category-score-label {
+        font-weight: bold;
+    }
+    .category-score-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .feedback-section {
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    .feedback-section:last-child {
+        border-bottom: none;
+    }
+    .feedback-section h3 {
+        color: #3498db;
+        border-left: 4px solid #3498db;
+        padding-left: 10px;
+        margin-bottom: 1rem;
+    }
+    .feedback-section ul {
+        padding-left: 1.5rem;
+    }
+    .feedback-section li {
+        margin-bottom: 0.5rem;
+    }
+    .feedback-section p {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+    .improvement-item {
+        background-color: #f8f9fa;
+        border-left: 4px solid #f39c12;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0 8px 8px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'cv_reviewer:index' %}">CV Reviewer</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Review Results</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <div class="overview-bg"></div>
+                    <div class="overview-content">
+                        <h2 class="text-center mb-4">CV Assessment</h2>
+                        
+                        <div class="score-circle mb-4">
+                            <div class="score-circle-inner">
+                                <div class="score-percent">{{ review.overall_score }}%</div>
+                                <div class="score-text">Overall Score</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="category-score">
+                                    <div class="category-score-label">Structure</div>
+                                    <div class="category-score-value">{{ review.structure_score }}%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="category-score">
+                                    <div class="category-score-label">Content</div>
+                                    <div class="category-score-value">{{ review.content_score }}%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="category-score">
+                                    <div class="category-score-label">Skills</div>
+                                    <div class="category-score-value">{{ review.skills_score }}%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="category-score">
+                                    <div class="category-score-label">Experience</div>
+                                    <div class="category-score-value">{{ review.experience_score }}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <div class="mb-3">
+                        <strong>Filename:</strong> {{ review.original_filename }}
+                    </div>
+                    {% if review.job_role %}
+                    <div class="mb-3">
+                        <strong>Target Role:</strong> {{ review.job_role }}
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <strong>Review Date:</strong> {{ review.created_at|date:"F j, Y" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong> {{ review.email_address }}
+                        {% if review.email_sent %}
+                            <span class="badge bg-success ms-2">Sent</span>
+                        {% else %}
+                            <span class="badge bg-warning ms-2">Pending</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{% url 'cv_reviewer:delete_review' review.id %}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash-alt me-2"></i> Delete Review
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h2 class="mb-0">Detailed Feedback</h2>
+                </div>
+                <div class="card-body p-0">
+                    {% if review.structure_feedback %}
+                    <div class="feedback-section">
+                        <h3>Structure & Formatting</h3>
+                        {{ review.structure_feedback|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if review.content_feedback %}
+                    <div class="feedback-section">
+                        <h3>Content Quality</h3>
+                        {{ review.content_feedback|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if review.skills_feedback %}
+                    <div class="feedback-section">
+                        <h3>Skills Assessment</h3>
+                        {{ review.skills_feedback|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if review.experience_feedback %}
+                    <div class="feedback-section">
+                        <h3>Experience Highlights</h3>
+                        {{ review.experience_feedback|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if review.improvement_suggestions %}
+                    <div class="feedback-section">
+                        <h3>Improvement Suggestions</h3>
+                        {{ review.improvement_suggestions|linebreaks }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Next Steps</h4>
+                </div>
+                <div class="card-body">
+                    <p>Consider implementing these suggestions to strengthen your CV. After revisions, you may want to:</p>
+                    <ul>
+                        <li>Ask a colleague or mentor to review your updated CV</li>
+                        <li>Tailor your CV further for each specific job application</li>
+                        <li>Update your LinkedIn profile to match your improved CV</li>
+                    </ul>
+                    
+                    <div class="alert alert-info mt-4">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-envelope-open-text fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading mb-1">Email Delivery</h5>
+                                <p class="mb-0">A detailed version of this review has been sent to your email address ({{ review.email_address }}).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Parse the feedback content to detect bullet points and convert them to list items
+        const feedbackSections = document.querySelectorAll('.feedback-section');
+        
+        feedbackSections.forEach(section => {
+            const paragraphs = section.querySelectorAll('p');
+            
+            let bulletPoints = [];
+            let currentList = null;
+            
+            paragraphs.forEach(paragraph => {
+                const text = paragraph.textContent;
+                
+                // Check if paragraph starts with "* " or "- " (bullet point)
+                if (text.trim().startsWith('* ') || text.trim().startsWith('- ')) {
+                    // If we don't have a list yet, create one
+                    if (!currentList) {
+                        currentList = document.createElement('ul');
+                        paragraph.parentNode.insertBefore(currentList, paragraph);
+                    }
+                    
+                    // Create a list item from the paragraph
+                    const listItem = document.createElement('li');
+                    listItem.textContent = text.replace(/^[\*\-]\s+/, '');
+                    currentList.appendChild(listItem);
+                    
+                    // Hide the original paragraph
+                    paragraph.style.display = 'none';
+                } else {
+                    // Reset the current list
+                    currentList = null;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

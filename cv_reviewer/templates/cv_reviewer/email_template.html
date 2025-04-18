@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Your CV Review Results</title>
+    <style>
+        /* Inline CSS for email compatibility */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .next-steps {
+            background-color: #f1f9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .next-steps h2 {
+            color: #3498db;
+            margin-top: 5px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your CV Review Results</h1>
+            <p>Thank you for using NeuroTools CV Reviewer. Here is your personalized CV assessment:</p>
+        </div>
+        
+        <div>
+            {{ review_content|safe }}
+        </div>
+        
+        <div class="next-steps">
+            <h2>Next Steps</h2>
+            <p>Consider implementing these suggestions to strengthen your CV. After revisions, you may want to:</p>
+            <ul style="padding-left: 20px;">
+                <li style="margin-bottom: 8px;">Ask a colleague or mentor to review your updated CV</li>
+                <li style="margin-bottom: 8px;">Tailor your CV further for each specific job application</li>
+                <li style="margin-bottom: 8px;">Update your LinkedIn profile to match your improved CV</li>
+            </ul>
+            
+            <p style="margin-top: 20px; text-align: center;">
+                <a href="{{ site_url }}{% url 'cv_reviewer:view_review' review_id %}" class="button">View Full Review Online</a>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>This review was generated using AI and should be considered as suggestions. 
+            For more personalized advice, consider consulting with a career coach.</p>
+            <p>&copy; {% now "Y" %} NeuroTools | Powered by Advanced AI | <a href="{{ site_url }}">Visit Our Website</a></p>
+        </div>
+    </div>
+</body>
+</html>

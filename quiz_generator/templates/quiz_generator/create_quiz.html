@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Quiz - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz_generator.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'quiz_generator:index' %}">Quiz Generator</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create Quiz</li>
+        </ol>
+    </nav>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h2 class="mb-0">Create New Quiz</h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <p>Upload a PDF document and our AI will generate quiz questions based on its content. Perfect for students, teachers, and self-learners.</p>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <div class="d-inline-block bg-light rounded-circle p-3">
+                        <span class="badge bg-primary p-2">1 Credit</span>
+                    </div>
+                    <p class="small text-muted mt-2">Each quiz creation uses 1 credit</p>
+                </div>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label for="pdf_file" class="form-label">Upload PDF Document</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="pdf_file" name="pdf_file" accept=".pdf" required>
+                        <label class="input-group-text" for="pdf_file"><i class="fas fa-file-pdf"></i></label>
+                    </div>
+                    <div class="form-text">Maximum file size: 10MB</div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="num_questions" class="form-label">Number of Questions</label>
+                        <input type="range" class="form-range" id="num_questions" name="num_questions" 
+                               min="1" max="20" value="5" oninput="updateQuestionCountDisplay(this.value)">
+                        <div class="text-center">
+                            <span id="question_count_display" class="badge bg-primary">5 Questions</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Difficulty Level</label>
+                        <div class="btn-group w-100" role="group" aria-label="Difficulty level">
+                            <input type="radio" class="btn-check" name="difficulty" id="easy" value="easy">
+                            <label class="btn btn-outline-success" for="easy">Easy</label>
+                            
+                            <input type="radio" class="btn-check" name="difficulty" id="medium" value="medium" checked>
+                            <label class="btn btn-outline-primary" for="medium">Medium</label>
+                            
+                            <input type="radio" class="btn-check" name="difficulty" id="hard" value="hard">
+                            <label class="btn btn-outline-danger" for="hard">Hard</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Question Types</label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="mc_box" name="mc_box" checked>
+                                <label class="form-check-label" for="mc_box">
+                                    Multiple Choice
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="tf_box" name="tf_box" checked>
+                                <label class="form-check-label" for="tf_box">
+                                    True/False
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="fib_box" name="fib_box">
+                                <label class="form-check-label" for="fib_box">
+                                    Fill in the Blank
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'quiz_generator:index' %}" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-cogs me-2"></i> Generate Quiz
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb text-warning me-2"></i> Tips</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Use PDFs with clear text (not scanned images)</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Content should be educational or informational</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Longer documents may take more time to process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-graduation-cap text-primary me-2"></i> Ideal For</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-user-graduate me-2"></i> Students studying for exams</li>
+                        <li class="mb-2"><i class="fas fa-chalkboard-teacher me-2"></i> Teachers creating classroom materials</li>
+                        <li class="mb-2"><i class="fas fa-book-reader me-2"></i> Self-learners reinforcing knowledge</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-question-circle text-info me-2"></i> How It Works</h5>
+                    <ol class="ps-3">
+                        <li class="mb-2">Upload your PDF document</li>
+                        <li class="mb-2">Our AI extracts and analyzes the text</li>
+                        <li class="mb-2">Questions are generated based on the content</li>
+                        <li class="mb-2">Take the quiz to test your knowledge</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateQuestionCountDisplay(value) {
+        document.getElementById('question_count_display').textContent = value + " Questions";
+    }
+    
+    // Form validation
+    (function () {
+        'use strict'
+        
+        // Fetch all forms with class needs-validation
+        var forms = document.querySelectorAll('.needs-validation')
+        
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    // Check if at least one question type is selected
+                    const mcBox = document.getElementById('mc_box').checked;
+                    const tfBox = document.getElementById('tf_box').checked;
+                    const fibBox = document.getElementById('fib_box').checked;
+                    
+                    if (!mcBox && !tfBox && !fibBox) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert('Please select at least one question type.');
+                        return;
+                    }
+                    
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
+</script>
+{% endblock %}

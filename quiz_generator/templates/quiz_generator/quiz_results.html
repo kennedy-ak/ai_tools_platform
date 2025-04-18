@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiz Results - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz_generator.css' %}">
+<style>
+    .results-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .score-circle-inner {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .score-percent {
+        font-size: 2rem;
+        font-weight: bold;
+        line-height: 1;
+        color: #3498db;
+    }
+    .score-text {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+    .answer-card {
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .answer-header {
+        padding: 0.75rem 1.25rem;
+    }
+    .correct {
+        background-color: rgba(46, 204, 113, 0.1);
+        border-left: 4px solid #2ecc71;
+    }
+    .incorrect {
+        background-color: rgba(231, 76, 60, 0.1);
+        border-left: 4px solid #e74c3c;
+    }
+    .answer-body {
+        padding: 1.25rem;
+        background-color: white;
+    }
+    .answer-option {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+    }
+    .selected-correct {
+        background-color: rgba(46, 204, 113, 0.1);
+        border: 1px solid #2ecc71;
+    }
+    .selected-incorrect {
+        background-color: rgba(231, 76, 60, 0.1);
+        border: 1px solid #e74c3c;
+    }
+    .correct-option {
+        background-color: rgba(46, 204, 113, 0.1);
+        border: 1px solid #2ecc71;
+    }
+    .explanation-box {
+        background-color: #f0f9ff;
+        border-left: 4px solid #3498db;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 0 8px 8px 0;
+    }
+    .stats-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s;
+    }
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    .stats-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #3498db;
+    }
+    .stats-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .share-btn {
+        background-color: #3b5998;
+        color: white;
+    }
+    .tweet-btn {
+        background-color: #1da1f2;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'quiz_generator:index' %}">Quiz Generator</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'quiz_generator:view_quiz' quiz.id %}">{{ quiz.title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Results</li>
+        </ol>
+    </nav>
+    
+    <div class="results-container">
+        <div class="text-center mb-5">
+            <h2>Quiz Results</h2>
+            <p class="text-muted">Completed on {{ attempt.end_time|date:"F j, Y, g:i a" }}</p>
+            
+            <div class="score-circle">
+                <div class="score-circle-inner">
+                    <div class="score-percent">{{ score|floatformat:0 }}%</div>
+                    <div class="score-text">Your Score</div>
+                </div>
+            </div>
+            
+            {% if score >= 90 %}
+                <div class="mt-3 text-success">
+                    <h4><i class="fas fa-trophy me-2"></i> Excellent!</h4>
+                    <p>Outstanding performance! You've mastered this material.</p>
+                </div>
+            {% elif score >= 70 %}
+                <div class="mt-3 text-primary">
+                    <h4><i class="fas fa-medal me-2"></i> Good Job!</h4>
+                    <p>Well done! You have a solid understanding of the material.</p>
+                </div>
+            {% elif score >= 50 %}
+                <div class="mt-3 text-warning">
+                    <h4><i class="fas fa-thumbs-up me-2"></i> Not Bad</h4>
+                    <p>You're on the right track, but there's room for improvement.</p>
+                </div>
+            {% else %}
+                <div class="mt-3 text-danger">
+                    <h4><i class="fas fa-book-reader me-2"></i> Keep Learning</h4>
+                    <p>You might need to review the material again. Don't give up!</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="stats-card h-100">
+                    <div class="stats-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stats-number text-success">
+                        {{ correct_count }}
+                    </div>
+                    <div class="stats-label">Correct Answers</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card h-100">
+                    <div class="stats-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stats-number text-danger">
+                        {{ incorrect_count }}
+                    </div>
+                    <div class="stats-label">Incorrect Answers</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card h-100">
+                    <div class="stats-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stats-number">
+                        {{ attempt.start_time|timesince:attempt.end_time }}
+                    </div>
+                    <div class="stats-label">Completion Time</div>
+                </div>
+            </div>
+        </div>
+        
+        <h3 class="mb-4">Question Review</h3>
+        
+        {% for answer in answers %}
+            <div class="answer-card {% if answer.is_correct %}correct{% else %}incorrect{% endif %}">
+                <div class="answer-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Question {{ forloop.counter }}</h5>
+                        {% if answer.is_correct %}
+                            <span class="badge bg-success">Correct</span>
+                        {% else %}
+                            <span class="badge bg-danger">Incorrect</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="answer-body">
+                    <div class="mb-3">{{ answer.question.question_text }}</div>
+                    
+                    {% if answer.question.question_type == 'multiple_choice' %}
+                        {% for option in answer.question.options.all %}
+                            <div class="answer-option 
+                                {% if option.id == answer.selected_option.id and answer.is_correct %}selected-correct
+                                {% elif option.id == answer.selected_option.id and not answer.is_correct %}selected-incorrect
+                                {% elif option.is_correct %}correct-option{% endif %}">
+                                {{ option.option_text }}
+                                {% if option.id == answer.selected_option.id and answer.is_correct %}
+                                    <i class="fas fa-check-circle text-success float-end"></i>
+                                {% elif option.id == answer.selected_option.id and not answer.is_correct %}
+                                    <i class="fas fa-times-circle text-danger float-end"></i>
+                                {% elif option.is_correct %}
+                                    <i class="fas fa-check-circle text-success float-end"></i>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% elif answer.question.question_type == 'true_false' %}
+                        {% for option in answer.question.options.all %}
+                            <div class="answer-option 
+                                {% if option.id == answer.selected_option.id and answer.is_correct %}selected-correct
+                                {% elif option.id == answer.selected_option.id and not answer.is_correct %}selected-incorrect
+                                {% elif option.is_correct %}correct-option{% endif %}">
+                                {{ option.option_text }}
+                                {% if option.id == answer.selected_option.id and answer.is_correct %}
+                                    <i class="fas fa-check-circle text-success float-end"></i>
+                                {% elif option.id == answer.selected_option.id and not answer.is_correct %}
+                                    <i class="fas fa-times-circle text-danger float-end"></i>
+                                {% elif option.is_correct %}
+                                    <i class="fas fa-check-circle text-success float-end"></i>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% elif answer.question.question_type == 'fill_in_blank' %}
+                        <div class="mb-3">
+                            <strong>Your answer:</strong> 
+                            {% if answer.text_answer %}
+                                <span class="{% if answer.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                    {{ answer.text_answer }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">No answer provided</span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <strong>Correct answer:</strong> 
+                            <span class="text-success">{{ answer.question.options.first.option_text }}</span>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="explanation-box">
+                        <h6><i class="fas fa-lightbulb me-2"></i> Explanation</h6>
+                        <p>{{ answer.question.explanation }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+            <a href="{% url 'quiz_generator:view_quiz' quiz.id %}" class="btn btn-primary">
+                <i class="fas fa-list-alt me-2"></i> Back to Quiz
+            </a>
+            <a href="{% url 'quiz_generator:take_quiz' quiz.id %}" class="btn btn-success">
+                <i class="fas fa-redo me-2"></i> Try Again
+            </a>
+            <button class="btn btn-outline-primary" onclick="window.print()">
+                <i class="fas fa-print me-2"></i> Print Results
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Calculate the score circle background
+    document.addEventListener('DOMContentLoaded', function() {
+        const score = {{ score|floatformat:0 }};
+        const circle = document.querySelector('.score-circle');
+        
+        if (score >= 90) {
+            circle.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+        } else if (score >= 70) {
+            circle.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
+        } else if (score >= 50) {
+            circle.style.background = 'linear-gradient(135deg, #f39c12, #f1c40f)';
+        } else {
+            circle.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        }
+    });
+</script>
+{% endblock %}

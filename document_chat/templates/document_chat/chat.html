@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ chat_session.title }} - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/document_chat.css' %}">
+<style>
+    .chat-container {
+        height: calc(100vh - 250px);
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .chat-header {
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .chat-body {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background-color: #fff;
+    }
+    .chat-footer {
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+    }
+    .message {
+        max-width: 80%;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    .message-user {
+        margin-left: auto;
+        background-color: #3498db;
+        color: white;
+        border-radius: 18px 18px 4px 18px;
+        padding: 0.8rem 1rem;
+    }
+    .message-assistant {
+        margin-right: auto;
+        background-color: #f1f1f1;
+        border-radius: 18px 18px 18px 4px;
+        padding: 0.8rem 1rem;
+    }
+    .message-time {
+        font-size: 0.7rem;
+        color: #aaa;
+        text-align: right;
+        margin-top: 0.3rem;
+    }
+    .message-assistant .message-time {
+        text-align: left;
+    }
+    .sources-container {
+        background-color: #f8f9fa;
+        border-left: 3px solid #3498db;
+        padding: 0.8rem;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border-radius: 0 8px 8px 0;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    .source-heading {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #3498db;
+        margin-bottom: 0.5rem;
+    }
+    .source-text {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        white-space: pre-line;
+    }
+    .chat-input {
+        border-radius: 30px;
+        padding-right: 50px;
+    }
+    .chat-send-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .typing-indicator {
+        display: none;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .typing-indicator-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #3498db;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: typing 1s infinite;
+    }
+    .typing-indicator-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .typing-indicator-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes typing {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'document_chat:index' %}">Document Chat</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'document_chat:view_document' document.id %}">{{ document.title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ chat_session.title }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="mb-0">{{ chat_session.title }}</h3>
+                            <div class="text-muted small">
+                                Chatting with: {{ document.title }}
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'document_chat:delete_chat_session' chat_session.id %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Delete Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-body" id="chat-body">
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-calendar-alt me-1"></i> Started {{ chat_session.created_at|date:"F j, Y" }}
+                            </span>
+                        </div>
+                        <p class="text-muted">
+                            Ask any questions about <strong>{{ document.title }}</strong>.<br>
+                            The AI will provide answers based on the document content.
+                        </p>
+                    </div>
+                    
+                    {% for message in messages %}
+                        {% if message.role == 'user' %}
+                            <div class="message message-user">
+                                {{ message.content }}
+                                <div class="message-time">{{ message.timestamp|date:"g:i A" }}</div>
+                            </div>
+                        {% else %}
+                            <div class="message message-assistant">
+                                {{ message.content|linebreaks }}
+                                <div class="message-time">{{ message.timestamp|date:"g:i A" }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <div class="typing-indicator" id="typing-indicator">
+                        <div class="message-assistant" style="padding: 8px 16px;">
+                            <div class="d-flex align-items-center">
+                                <div class="typing-indicator-dot"></div>
+                                <div class="typing-indicator-dot"></div>
+                                <div class="typing-indicator-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <form id="chat-form" class="position-relative">
+                        <input type="text" class="form-control chat-input" id="chat-input" placeholder="Ask a question about the document..." autocomplete="off">
+                        <button type="submit" class="btn btn-primary chat-send-btn" id="chat-send-btn" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Document Info</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0"><strong>Title:</strong> {{ document.title }}</p>
+                    <p class="mb-0"><strong>Uploaded:</strong> {{ document.created_at|date:"M d, Y" }}</p>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                            <i class="fas fa-file-pdf me-1"></i> View PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Sources</h5>
+                </div>
+                <div class="card-body">
+                    <div id="sources-panel">
+                        <p class="text-muted text-center">
+                            <i class="fas fa-info-circle me-1"></i> Sources from the document will appear here when the AI answers your questions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // DOM elements
+const chatBody = document.getElementById('chat-body');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatSendBtn = document.getElementById('chat-send-btn');
+const typingIndicator = document.getElementById('typing-indicator');
+const sourcesPanel = document.getElementById('sources-panel');
+
+// Chat session data
+const chatSessionId = {{ chat_session.id }};
+const csrfToken = '{{ csrf_token }}';
+
+// Scroll to bottom of chat
+function scrollToBottom() {
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Show typing indicator
+function showTypingIndicator() {
+    typingIndicator.style.display = 'block';
+    scrollToBottom();
+}
+
+// Hide typing indicator
+function hideTypingIndicator() {
+    typingIndicator.style.display = 'none';
+}
+
+// Add a user message to the chat
+function addUserMessage(text) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message message-user';
+    messageDiv.textContent = text;
+    
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = new Date().toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+    
+    messageDiv.appendChild(timeDiv);
+    chatBody.appendChild(messageDiv);
+    
+    scrollToBottom();
+}
+
+// Add an assistant message to the chat
+function addAssistantMessage(text, sources) {
+    hideTypingIndicator();
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message message-assistant';
+    
+    // Replace newlines with <br> tags
+    messageDiv.innerHTML = text.replace(/\n/g, '<br>');
+    
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = new Date().toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+    
+    messageDiv.appendChild(timeDiv);
+    chatBody.appendChild(messageDiv);
+    
+    // Update sources panel
+    updateSourcesPanel(sources);
+    
+    scrollToBottom();
+}
+
+// Update the sources panel
+function updateSourcesPanel(sources) {
+    if (!sources || sources.length === 0) {
+        sourcesPanel.innerHTML = '<p class="text-muted text-center"><i class="fas fa-info-circle me-1"></i> No specific sources cited for this response.</p>';
+        return;
+    }
+    
+    let sourcesHtml = '<div class="source-heading">Sources from Document:</div>';
+    
+    sources.forEach((source, index) => {
+        sourcesHtml += `
+            <div class="source-text">
+                "${source.substr(0, 200)}${source.length > 200 ? '...' : ''}"
+            </div>
+            ${index < sources.length - 1 ? '<hr class="my-2">' : ''}
+        `;
+    });
+    
+    sourcesPanel.innerHTML = sourcesHtml;
+}
+
+// Send a message to the server
+async function sendMessage(text) {
+    showTypingIndicator();
+    
+    try {
+        // Log the URL to debug
+        console.log(`Sending message to: /document_chat/chat/${chatSessionId}/send/`);
+        
+        const response = await fetch(`/document_chat/chat/${chatSessionId}/send/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ message: text }),
+            credentials: 'same-origin' // Include cookies for CSRF validation
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server error:', errorText);
+            throw new Error(`Server error: ${response.status} ${errorText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        addAssistantMessage(data.message, data.sources);
+        
+    } catch (error) {
+        hideTypingIndicator();
+        console.error('Error:', error);
+        
+        // Add a more helpful error message to the chat
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message message-assistant';
+        errorDiv.innerHTML = `<div class="alert alert-danger mb-0">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Sorry, I couldn't process your message. Please try again later.
+            <br><small class="text-muted">${error.message}</small>
+        </div>`;
+        chatBody.appendChild(errorDiv);
+        scrollToBottom();
+    }
+}
+
+// Initialize the chat
+function initChat() {
+    // Enable or disable send button based on input
+    chatInput.addEventListener('input', function() {
+        chatSendBtn.disabled = chatInput.value.trim() === '';
+    });
+    
+    // Handle form submission
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        addUserMessage(message);
+        sendMessage(message);
+        
+        chatInput.value = '';
+        chatSendBtn.disabled = true;
+    });
+    
+    // Scroll to bottom initially
+    scrollToBottom();
+}
+
+// Initialize when the page loads
+document.addEventListener('DOMContentLoaded', initChat);
+</script>
+{% endblock %}

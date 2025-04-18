@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NeuroTools - AI-Powered Tools for Productivity{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">AI-Powered Tools for Everyday Tasks</h1>
+                <p class="lead mb-4">Harness the power of artificial intelligence to streamline workflows, enhance learning, and improve your professional documents.</p>
+                {% if not user.is_authenticated %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
+                </div>
+                {% else %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="#tools" class="btn btn-light btn-lg px-4 me-md-2">Explore Tools</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="{% static 'images/chat.png' %}" alt="AI Tools Illustration" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5" id="tools">
+    <h2 class="text-center mb-5">Our AI-Powered Tools</h2>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card tool-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="tool-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="card-title">PDF Quiz Generator</h3>
+                    <p class="card-text">Transform any PDF into interactive quizzes. Perfect for students, teachers, and self-learners looking to reinforce knowledge.</p>
+                    <a href="{% url 'quiz_generator:index' %}" class="btn btn-primary mt-3">Generate Quiz</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card tool-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="tool-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="card-title">CV Reviewer</h3>
+                    <p class="card-text">Get professional feedback on your resume or CV. Our AI analyzes your document and provides actionable improvements.</p>
+                    <a href="{% url 'cv_reviewer:index' %}" class="btn btn-primary mt-3">Review CV</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card tool-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="tool-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="card-title">Document Chat</h3>
+                    <p class="card-text">Chat with your documents. Ask questions and get instant answers based on the content of your PDFs.</p>
+                    <a href="{% url 'document_chat:index' %}" class="btn btn-primary mt-3">Start Chatting</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose NeuroTools?</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Fast & Efficient</h3>
+                <p>Our AI tools process your requests in seconds, saving you valuable time.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Secure & Private</h3>
+                <p>Your documents and data are processed securely and never stored longer than necessary.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Smart Technology</h3>
+                <p>Powered by state-of-the-art language models for accurate and intelligent responses.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h2 class="mb-4">Ready to get started?</h2>
+            <p class="lead mb-5">Join thousands of professionals and students who are already using NeuroTools to enhance their productivity.</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg px-5">Create Free Account</a>
+            {% else %}
+            <a href="#tools" class="btn btn-primary btn-lg px-5">Explore Tools</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

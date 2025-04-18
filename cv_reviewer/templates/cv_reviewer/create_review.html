@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create CV Review - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cv_reviewer.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'cv_reviewer:index' %}">CV Reviewer</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create Review</li>
+        </ol>
+    </nav>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h2 class="mb-0">Get Professional CV Review</h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <p>Upload your CV and our AI will analyze it to provide professional feedback on structure, content, and more. Get insights to make your CV stand out.</p>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <div class="d-inline-block bg-light rounded-circle p-3">
+                        <span class="badge bg-primary p-2">1 Credit</span>
+                    </div>
+                    <p class="small text-muted mt-2">Each review uses 1 credit</p>
+                </div>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label for="cv_file" class="form-label">Upload CV/Resume</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="cv_file" name="cv_file" accept=".pdf,.docx" required>
+                        <label class="input-group-text" for="cv_file"><i class="fas fa-file-alt"></i></label>
+                    </div>
+                    <div class="form-text">Accepted formats: PDF, DOCX (Maximum file size: 5MB)</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-text">We'll send the detailed review to this email address</div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="job_role_checkbox" name="job_role_checkbox">
+                        <label class="form-check-label" for="job_role_checkbox">
+                            I want targeted feedback for a specific job role
+                        </label>
+                    </div>
+                    
+                    <div id="job_role_container" class="mt-3 d-none">
+                        <label for="job_role" class="form-label">Job Role/Title</label>
+                        <input type="text" class="form-control" id="job_role" name="job_role" placeholder="e.g., Software Engineer, Marketing Manager, Data Analyst">
+                        <div class="form-text">Providing a job role allows us to tailor our feedback for that specific position</div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'cv_reviewer:index' %}" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-cogs me-2"></i> Review My CV
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb text-warning me-2"></i> Tips</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Use PDFs with clear text (not scanned images)</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Include all sections you want feedback on</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Specify a job role for targeted feedback</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-tasks text-primary me-2"></i> What We Evaluate</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-file-alt me-2"></i> Structure & Formatting</li>
+                        <li class="mb-2"><i class="fas fa-align-left me-2"></i> Content Quality & Clarity</li>
+                        <li class="mb-2"><i class="fas fa-tools me-2"></i> Skills Presentation</li>
+                        <li class="mb-2"><i class="fas fa-chart-line me-2"></i> Experience Highlights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-shield-alt text-success me-2"></i> Privacy Assurance</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-lock me-2"></i> Secure document processing</li>
+                        <li class="mb-2"><i class="fas fa-clock me-2"></i> Files deleted after processing</li>
+                        <li class="mb-2"><i class="fas fa-user-shield me-2"></i> Your data is never shared</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle job role input visibility
+    document.addEventListener('DOMContentLoaded', function() {
+        const jobRoleCheckbox = document.getElementById('job_role_checkbox');
+        const jobRoleContainer = document.getElementById('job_role_container');
+        const jobRoleInput = document.getElementById('job_role');
+        
+        jobRoleCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                jobRoleContainer.classList.remove('d-none');
+                jobRoleInput.setAttribute('required', '');
+            } else {
+                jobRoleContainer.classList.add('d-none');
+                jobRoleInput.removeAttribute('required');
+            }
+        });
+        
+        // Form validation
+        const form = document.querySelector('.needs-validation');
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %}

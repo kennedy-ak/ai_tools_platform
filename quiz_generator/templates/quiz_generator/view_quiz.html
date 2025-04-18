@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ quiz.title }} - NeuroTools{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz_generator.css' %}">
+<style>
+    .question-list {
+        counter-reset: question-counter;
+    }
+    .question-item {
+        counter-increment: question-counter;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+    .question-item::before {
+        content: "Q" counter(question-counter) ":";
+        font-weight: bold;
+        color: #3498db;
+        margin-right: 0.5rem;
+    }
+    .badge-mc {
+        background-color: #e9f7fe;
+        color: #3498db;
+    }
+    .badge-tf {
+        background-color: #e9fef2;
+        color: #27ae60;
+    }
+    .badge-fib {
+        background-color: #fef5e9;
+        color: #f39c12;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'quiz_generator:index' %}">Quiz Generator</a></li>
+            <li class="breadcrumb-item active" aria-current="page">View Quiz</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ quiz.title }}</h2>
+                    <span class="badge bg-primary">{{ quiz.get_difficulty_display }}</span>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">{{ quiz.description }}</p>
+                    
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                        <div>
+                            <p class="mb-0"><strong>Created:</strong> {{ quiz.created_at|date:"F j, Y" }}</p>
+                            <p class="mb-0"><strong>Questions:</strong> {{ questions|length }}</p>
+                            <p class="mb-0"><strong>Source File:</strong> {{ quiz.original_file_name }}</p>
+                        </div>
+                        <div class="mt-3 mt-md-0">
+                            <a href="{% url 'quiz_generator:take_quiz' quiz.id %}" class="btn btn-success">
+                                <i class="fas fa-play me-2"></i> Take Quiz
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mb-3">Preview Questions</h4>
+                    <div class="question-list">
+                        {% for question in questions %}
+                        <div class="question-item">
+                            <div class="mb-2 d-flex justify-content-between align-items-start">
+                                <div class="me-2">{{ question.question_text }}</div>
+                                {% if question.question_type == 'multiple_choice' %}
+                                    <span class="badge badge-mc">Multiple Choice</span>
+                                {% elif question.question_type == 'true_false' %}
+                                    <span class="badge badge-tf">True/False</span>
+                                {% else %}
+                                    <span class="badge badge-fib">Fill in Blank</span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if question.question_type == 'multiple_choice' %}
+                                <ul class="list-group">
+                                    {% for option in question.options.all %}
+                                    <li class="list-group-item {% if option.is_correct %}list-group-item-success{% endif %}">
+                                        {{ option.option_text }} {% if option.is_correct %}<i class="fas fa-check-circle text-success ms-2"></i>{% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% elif question.question_type == 'true_false' %}
+                                <ul class="list-group">
+                                    {% for option in question.options.all %}
+                                    <li class="list-group-item {% if option.is_correct %}list-group-item-success{% endif %}">
+                                        {{ option.option_text }} {% if option.is_correct %}<i class="fas fa-check-circle text-success ms-2"></i>{% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% elif question.question_type == 'fill_in_blank' %}
+                                <div class="alert alert-success">
+                                    Correct answer: {{ question.options.first.option_text }}
+                                </div>
+                            {% endif %}
+                            
+                            {% if question.explanation %}
+                            <div class="mt-2">
+                                <strong>Explanation:</strong> {{ question.explanation }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Quiz Options</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{% url 'quiz_generator:take_quiz' quiz.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h5 class="mb-1"><i class="fas fa-play me-2"></i> Take Quiz</h5>
+                                <span><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                            <p class="mb-1">Start the quiz and test your knowledge</p>
+                        </a>
+                        
+                        <a href="#" class="list-group-item list-group-item-action" onclick="printQuiz(); return false;">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h5 class="mb-1"><i class="fas fa-print me-2"></i> Print Quiz</h5>
+                                <span><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                            <p class="mb-1">Create a printable version</p>
+                        </a>
+                        
+                        <a href="{% url 'quiz_generator:delete_quiz' quiz.id %}" class="list-group-item list-group-item-action text-danger">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h5 class="mb-1"><i class="fas fa-trash-alt me-2"></i> Delete Quiz</h5>
+                                <span><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                            <p class="mb-1">Permanently delete this quiz</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Previous Attempts</h4>
+                </div>
+                <div class="card-body">
+                    {% with attempts=quiz.attempts.all %}
+                    {% if attempts %}
+                    <div class="list-group">
+                        {% for attempt in attempts %}
+                        <a href="{% url 'quiz_generator:quiz_results' attempt.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Attempt #{{ forloop.counter }}</h5>
+                                <small>{{ attempt.start_time|date:"M d, Y" }}</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-1">
+                                    {% if attempt.score %}
+                                        Score: {{ attempt.score|floatformat:1 }}%
+                                    {% else %}
+                                        In progress
+                                    {% endif %}
+                                </p>
+                                <span class="badge bg-secondary">View Results</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No attempts yet</p>
+                        <p><a href="{% url 'quiz_generator:take_quiz' quiz.id %}" class="btn btn-primary btn-sm mt-2">Start First Attempt</a></p>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function printQuiz() {
+        window.print();
+    }
+</script>
+{% endblock %}

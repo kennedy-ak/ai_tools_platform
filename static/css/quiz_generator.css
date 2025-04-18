@@ -1,0 +1,243 @@
+/* Quiz Generator App Styles */
+
+/* Quiz card styles */
+.quiz-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.quiz-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Question type badges */
+.badge-mc {
+    background-color: #e9f7fe;
+    color: #3498db;
+    border-radius: 50px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.badge-tf {
+    background-color: #e9fef2;
+    color: #27ae60;
+    border-radius: 50px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.badge-fib {
+    background-color: #fef5e9;
+    color: #f39c12;
+    border-radius: 50px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* Custom radio buttons for quiz options */
+.custom-option {
+    margin-bottom: 1rem;
+}
+
+.custom-option .option-label {
+    display: block;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.custom-option .option-label:hover {
+    background-color: #f1f8ff;
+    border-color: #3498db;
+}
+
+.custom-option input[type="radio"]:checked + .option-label {
+    background-color: #e3f2fd;
+    border-color: #3498db;
+}
+
+/* Progress bar */
+.question-progress {
+    height: 4px;
+}
+
+.progress-bar {
+    background-color: #3498db;
+}
+
+/* Explanation boxes */
+.explanation-box {
+    background-color: #f0f9ff;
+    border-left: 4px solid #3498db;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Quiz results page */
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.score-circle-inner {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.score-percent {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #3498db;
+}
+
+.score-text {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+/* Answer review cards */
+.answer-card {
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.answer-header {
+    padding: 0.75rem 1.25rem;
+}
+
+.answer-card.correct {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-left: 4px solid #2ecc71;
+}
+
+.answer-card.incorrect {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 4px solid #e74c3c;
+}
+
+.answer-body {
+    padding: 1.25rem;
+    background-color: white;
+}
+
+.answer-option {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #eee;
+}
+
+.selected-correct {
+    background-color: rgba(46, 204, 113, 0.1);
+    border: 1px solid #2ecc71;
+}
+
+.selected-incorrect {
+    background-color: rgba(231, 76, 60, 0.1);
+    border: 1px solid #e74c3c;
+}
+
+.correct-option {
+    background-color: rgba(46, 204, 113, 0.1);
+    border: 1px solid #2ecc71;
+}
+
+/* Stats cards on results page */
+.stats-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #3498db;
+}
+
+.stats-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stats-label {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* Quiz timer */
+.quiz-timer {
+    background-color: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    display: inline-block;
+    font-weight: bold;
+    color: #3498db;
+}
+
+/* Quiz creation page */
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #3498db;
+}
+
+/* Print styles */
+@media print {
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .navbar, .footer, .btn, nav {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    .score-circle {
+        border: 2px solid #ddd !important;
+        box-shadow: none !important;
+    }
+}

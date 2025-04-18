@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Chat Session{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Delete Chat Session</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Are you sure you want to delete the chat session "<strong>{{ chat_session.title }}</strong>"?
+                    </div>
+                    
+                    <p>This action cannot be undone. All messages in this chat session will be permanently deleted.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Chat Session Information</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Title:</strong> {{ chat_session.title }}</li>
+                                <li><strong>Document:</strong> {{ chat_session.document.title }}</li>
+                                <li><strong>Created on:</strong> {{ chat_session.created_at|date:"F j, Y, g:i a" }}</li>
+                                <li><strong>Last activity:</strong> {{ chat_session.last_activity|date:"F j, Y, g:i a" }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <form method="post" action="{% url 'document_chat:delete_chat_session' chat_session.id %}">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'document_chat:chat' chat_session.id %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Delete Chat Session
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
