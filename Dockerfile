@@ -21,4 +21,4 @@ ENV DEBUG=False
 EXPOSE 8080
 
 # Run the application
-CMD ["gunicorn", "-b", ":8080", "ai_tools_platform.wsgi"]
+CMD ["python manage.py runserver"]
