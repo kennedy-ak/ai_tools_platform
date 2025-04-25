@@ -21,4 +21,4 @@ ENV DEBUG=False
 EXPOSE 8080
 
 # Run the application
-CMD ["python manage.py runserver"]
+CMD ["python3 manage.py runserver"]
