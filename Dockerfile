@@ -1,5 +1,5 @@
 # Use the official Python image as a parent image
-FROM pytorch/manylinux-cpu
+FROM pytorch/pytorch
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
