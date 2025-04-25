@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}NeuroTools - AI-Powered Tools for Productivity{% endblock %}
+{% block title %}NeuroTools - AI-Powered Study and Document Tools for Students{% endblock %}
 
 {% block content %}
 <!-- Hero Section with inline styles -->
@@ -9,22 +9,22 @@
     <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3" style="font-size: 3.2rem !important;">Transform Your Workflow with AI</h1>
-                <p class="lead mb-4 pe-lg-5">Harness cutting-edge artificial intelligence to streamline tasks, enhance learning, and create professional-quality documents in seconds.</p>
+                <h1 class="display-4 fw-bold mb-3" style="font-size: 3.2rem !important;">Ace Your Exams with AI-Powered Study Tools</h1>
+                <p class="lead mb-4 pe-lg-5">Transform how you prepare for exams, polish your CV, and interact with your study materials using cutting-edge AI designed specifically for students.</p>
                 {% if not user.is_authenticated %}
                 <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-5">
-                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-4 me-md-2 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Get Started Free</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-4 me-md-2 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Start Studying Smarter</a>
                     <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
                 </div>
                 {% else %}
                 <div class="d-grid gap-3 d-md-flex justify-content-md-start mt-5">
-                    <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Explore Tools</a>
+                    <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8); transition: all 0.3s ease; position: relative; overflow: hidden;">Explore Study Tools</a>
                 </div>
                 {% endif %}
             </div>
             <div class="col-lg-6 d-none d-lg-block">
                 <div style="animation: floating 3s ease-in-out infinite;">
-                    <img src="{% static 'images/chat.png' %}" alt="AI Tools Illustration" class="img-fluid rounded shadow-lg" style="border-radius: 1rem !important; box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;">
+                    <img src="{% static 'images/chat.png' %}" alt="Student Study Tools Illustration" class="img-fluid rounded shadow-lg" style="border-radius: 1rem !important; box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;">
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
                 <div class="card-body">
                     {% comment %} <h2 class="fw-bold text-primary mb-0">10,000+</h2>
-                    <p class="text-muted mb-0">Active Users</p> {% endcomment %}
+                    <p class="text-muted mb-0">Active Students</p> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
                 <div class="card-body">
                     {% comment %} <h2 class="fw-bold text-primary mb-0">50,000+</h2>
-                    <p class="text-muted mb-0">Documents Processed</p> {% endcomment %}
+                    <p class="text-muted mb-0">Practice Quizzes Generated</p> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
             <div class="card border-0 shadow-sm py-3" style="border-radius: 1rem !important; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;">
                 <div class="card-body">
                     {% comment %} <h2 class="fw-bold text-primary mb-0">4.9/5</h2>
-                    <p class="text-muted mb-0">User Satisfaction</p> {% endcomment %}
+                    <p class="text-muted mb-0">Exam Success Rate</p> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -64,9 +64,9 @@
 <!-- Tools Section -->
 <div class="container py-5" id="tools">
     <div class="text-center mb-5">
-        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Our Solutions</span>
-        <h2 class="display-5 fw-bold">Powerful AI Tools</h2>
-        <p class="lead text-muted col-lg-8 mx-auto">Choose from our suite of specialized AI tools designed to make your personal and professional life easier.</p>
+        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Student Success Tools</span>
+        <h2 class="display-5 fw-bold">Study Smarter, Not Harder</h2>
+        <p class="lead text-muted col-lg-8 mx-auto">Our specialized AI tools are designed to help you excel in your studies and prepare for your professional future.</p>
     </div>
     
     <div class="row g-4">
@@ -76,10 +76,10 @@
                     <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #FF6B6B, #FF8E8E); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-book"></i>
                     </div>
-                    <h3 class="card-title fw-bold">PDF Quiz Generator</h3>
-                    <p class="card-text text-muted">Transform any PDF document into interactive quizzes with intelligent question generation. Perfect for students, teachers, and self-learners.</p>
+                    <h3 class="card-title fw-bold">Exam Quiz Generator</h3>
+                    <p class="card-text text-muted">Turn any PDF textbook or lecture notes into customized practice quizzes. Create multiple-choice, true/false, and short answer questions to test your knowledge before exams.</p>
                     <div class="mt-4">
-                        <a href="{% url 'quiz_generator:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Generate Quiz</a>
+                        <a href="{% url 'quiz_generator:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Create Practice Quiz</a>
                     </div>
                 </div>
             </div>
@@ -91,10 +91,10 @@
                     <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #4776E6, #8E54E9); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-file-alt"></i>
                     </div>
-                    <h3 class="card-title fw-bold">CV Reviewer</h3>
-                    <p class="card-text text-muted">Get expert feedback on your resume or CV. Our AI analyzes your document and provides actionable improvements to help you land your dream job.</p>
+                    <h3 class="card-title fw-bold">CV Optimizer</h3>
+                    <p class="card-text text-muted">Get your resume internship or job-ready with AI-powered feedback. Receive personalized suggestions to highlight your academic achievements and make your CV stand out to employers.</p>
                     <div class="mt-4">
-                        <a href="{% url 'cv_reviewer:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Review CV</a>
+                        <a href="{% url 'cv_reviewer:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Optimize Your CV</a>
                     </div>
                 </div>
             </div>
@@ -106,10 +106,10 @@
                     <div style="width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);">
                         <i class="fas fa-comments"></i>
                     </div>
-                    <h3 class="card-title fw-bold">Document Chat</h3>
-                    <p class="card-text text-muted">Chat with your documents. Upload any file and ask questions to instantly get answers based on your document's content.</p>
+                    <h3 class="card-title fw-bold">Study Material Chat</h3>
+                    <p class="card-text text-muted">Have conversations with your textbooks and lecture PDFs. Ask questions about complex topics and get instant explanations to deepen your understanding before exams.</p>
                     <div class="mt-4">
-                        <a href="{% url 'document_chat:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Start Chatting</a>
+                        <a href="{% url 'document_chat:index' %}" class="btn btn-lg btn-primary px-4 mt-3" style="border-radius: 50rem !important; box-shadow: 0 6px 30px -10px rgba(110, 72, 170, 0.8);">Chat With Your PDFs</a>
                     </div>
                 </div>
             </div>
@@ -121,9 +121,9 @@
 <div class="py-5 my-5" style="background: linear-gradient(to bottom, #f8f9fa, #ffffff); border-radius: 50px; margin: 30px auto; box-shadow: 0 0 60px rgba(0, 0, 0, 0.03);">
     <div class="container py-5">
         <div class="text-center mb-5">
-            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Why NeuroTools</span>
-            <h2 class="display-5 fw-bold">Smart Technology, Better Results</h2>
-            <p class="lead text-muted col-lg-8 mx-auto">We combine state-of-the-art AI with intuitive design to help you accomplish more.</p>
+            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Why Students Love Us</span>
+            <h2 class="display-5 fw-bold">Designed for Academic Success</h2>
+            <p class="lead text-muted col-lg-8 mx-auto">Our tools are specifically built to help students master course material, prepare for exams, and launch their careers.</p>
         </div>
         
         <div class="row g-5 mt-3">
@@ -131,109 +131,38 @@
                 <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-bolt"></i>
                 </div>
-                <h3 class="fw-bold">Lightning Fast</h3>
-                <p class="text-muted">Our AI tools process your requests in seconds, not minutes, saving you valuable time on every task.</p>
+                <h3 class="fw-bold">Study Efficiently</h3>
+                <p class="text-muted">Generate practice questions and get answers about your study materials in seconds, allowing you to focus on learning instead of searching.</p>
             </div>
             <div class="col-md-4 text-center">
                 <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-lock"></i>
                 </div>
-                <h3 class="fw-bold">Bank-Level Security</h3>
-                <p class="text-muted">Your documents and data are encrypted and processed securely. We never store sensitive information longer than necessary.</p>
+                <h3 class="fw-bold">Privacy Protected</h3>
+                <p class="text-muted">Your academic documents and personal information are encrypted and processed securely, keeping your study materials and CV private.</p>
             </div>
             <div class="col-md-4 text-center">
                 <div style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border-radius: 50%; color: white; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #6e48aa, #9d50bb); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3 class="fw-bold">Intelligent Analysis</h3>
-                <p class="text-muted">Powered by advanced language models that understand context and provide meaningful, accurate insights.</p>
+                <h3 class="fw-bold">Exam-Focused Intelligence</h3>
+                <p class="text-muted">Our AI understands academic content and creates questions that mirror real exam formats, helping you prepare effectively for tests and assessments.</p>
             </div>
         </div>
     </div>
 </div>
-{% comment %} 
-<!-- Testimonials -->
-<div class="container py-5 my-5">
-    <div class="text-center mb-5">
-        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2">Testimonials</span>
-        <h2 class="display-5 fw-bold">What Our Users Say</h2>
-        <p class="lead text-muted col-lg-8 mx-auto">Join thousands of satisfied professionals and students using NeuroTools.</p>
-    </div>
-    
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
-                <div class="card-body p-4 position-relative">
-                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <p class="card-text mb-4">"The PDF Quiz Generator has completely changed how I study. I can create practice questions from any textbook in seconds!"</p>
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <span class="fw-bold text-primary">JM</span>
-                        </div>
-                        <div class="ms-3">
-                            <h5 class="mb-0 fw-bold">Jamie Miller</h5>
-                            <small class="text-muted">Medical Student</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
-                <div class="card-body p-4 position-relative">
-                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <p class="card-text mb-4">"The CV Reviewer tool provided insights I would have never considered. Got three interview calls after implementing the suggestions!"</p>
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <span class="fw-bold text-primary">AR</span>
-                        </div>
-                        <div class="ms-3">
-                            <h5 class="mb-0 fw-bold">Alex Rodriguez</h5>
-                            <small class="text-muted">Software Engineer</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; transition: all 0.3s ease;">
-                <div class="card-body p-4 position-relative">
-                    <div style="font-size: 3rem; color: rgba(110, 72, 170, 0.2); position: absolute; top: 20px; right: 20px;">
-                        <i class="fas fa-quote-right"></i>
-                    </div>
-                    <p class="card-text mb-4">"Document Chat allows me to quickly get answers from long reports without reading through everything. Huge time-saver for my research!"</p>
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <span class="fw-bold text-primary">SP</span>
-                        </div>
-                        <div class="ms-3">
-                            <h5 class="mb-0 fw-bold">Sarah Patel</h5>
-                            <small class="text-muted">Research Analyst</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
 
 <!-- CTA Section -->
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="text-white text-center p-5" style="background: linear-gradient(135deg, #6e48aa, #9d50bb); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden;">
-                <h2 class="display-5 fw-bold mb-4">Ready to boost your productivity?</h2>
-                <p class="lead mb-5">Join thousands of professionals and students who are already using NeuroTools to work smarter, not harder.</p>
+                <h2 class="display-5 fw-bold mb-4">Ready to ace your next exam?</h2>
+                <p class="lead mb-5">Join thousands of students who are using NeuroTools to improve their grades, prepare for tests, and build career-ready CVs.</p>
                 {% if not user.is_authenticated %}
-                <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Create Free Account</a>
+                <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Create Student Account</a>
                 {% else %}
-                <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Explore Tools</a>
+                <a href="#tools" class="btn btn-light btn-lg px-5 fw-bold" style="box-shadow: 0 6px 30px -10px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">Explore Study Tools</a>
                 {% endif %}
             </div>
         </div>
