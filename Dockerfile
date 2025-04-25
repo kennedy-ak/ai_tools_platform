@@ -1,5 +1,5 @@
 # Use the official Python image as a parent image
-FROM python:3.11-slim
+FROM pytorch/manylinux-cpu
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
