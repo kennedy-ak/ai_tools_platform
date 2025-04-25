@@ -1,5 +1,5 @@
 # Use the official Python image as a parent image
-FROM pytorch/pytorch
+FROM python:3.11-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
