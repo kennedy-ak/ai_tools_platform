@@ -198,6 +198,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+CSRF_TRUSTED_ORIGINS = [
+    "https://neuro-tools-474817267520.us-central1.run.app",
+]
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
