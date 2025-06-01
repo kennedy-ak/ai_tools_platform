@@ -212,19 +212,7 @@ WSGI_APPLICATION = 'ai_tools_platform.wsgi.application'
 #     )
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'habari',
-#         'USER': 'habari_owner',
-#         'PASSWORD': 'npg_68fbrsWKZVUm',
-#         'HOST': 'ep-damp-bush-a8fk8y2e-pooler.eastus2.azure.neon.tech',
-#         'PORT': '5432',
-#         'OPTIONS': {
-#             'sslmode': 'require',
-#         }
-#     }
-# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
