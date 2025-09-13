@@ -129,18 +129,23 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import environ
+import os
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG=os.getenv('DEBUG')
+DEBUG=env('DEBUG')
 
 ALLOWED_HOSTS = ["*"]
 
@@ -201,11 +206,27 @@ WSGI_APPLICATION = 'ai_tools_platform.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv("DATABASE_URL")
+#     )
+# }
+
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+        'OPTIONS': {
+            'sslmode': env('DB_SSLMODE'),
+        }
+    }
 }
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://neuro-tools-474817267520.us-central1.run.app",
@@ -260,16 +281,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Load environment variables from .env file
 load_dotenv()
 
-EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = 465
-EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL') 
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = os.getenv('SERVER_EMAIL')
+EMAIL_USE_SSL = env('EMAIL_USE_SSL') 
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = env('SERVER_EMAIL')
 
 # API Keys
-GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+GROQ_API_KEY = env('GROQ_API_KEY')
 
 # Message settings
 from django.contrib.messages import constants as messages
