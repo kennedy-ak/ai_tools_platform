@@ -127,7 +127,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-import dj_database_url
+# import dj_database_url
 
 load_dotenv()
 
@@ -136,7 +136,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+ #= os.getenv('SECRET_KEY')
+SECRET_KEY="@hj87ltvk2@mtptm__9&hhn$m@9ux9fka-5n6u7_+)l+@^(9gh"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -195,17 +196,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ai_tools_platform.wsgi.application'
 
 # Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv("DATABASE_URL")
+#     )
+# }
 
 CSRF_TRUSTED_ORIGINS = [
     "https://neuro-tools-474817267520.us-central1.run.app",
@@ -270,6 +271,7 @@ SERVER_EMAIL = os.getenv('SERVER_EMAIL')
 
 # API Keys
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Message settings
 from django.contrib.messages import constants as messages

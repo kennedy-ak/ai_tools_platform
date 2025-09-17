@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-
+from functools import lru_cache
 import os
 import re
 import json
@@ -16,8 +16,7 @@ from pathlib import Path
 import tempfile
 import PyPDF2
 from groq import Groq
-from sentence_transformers import SentenceTransformer
-from transformers import AutoModel
+from openai import OpenAI
 import faiss
 
 from .models import Document, ChatSession, Message, DocumentEmbedding
@@ -25,7 +24,7 @@ from accounts.models import UsageLog
 
 
 class FAISSIndex:
-    def __init__(self, dimension=384):
+    def __init__(self, dimension=1536):
         self.dimension = dimension
         self.index = faiss.IndexFlatL2(dimension)
         
@@ -43,12 +42,20 @@ class FAISSIndex:
         distances, indices = self.index.search(query_embedding, min(top_k, self.index.ntotal))
         return distances, indices
 
-from functools import lru_cache
+
 @lru_cache()
-def load_embedding_model():
-    """Load the sentence transformer model for embeddings."""
-    # return AutoModel.from_pretrained('jinaai/jina-embeddings-v2-base-en', trust_remote_code=True)
-    return SentenceTransformer("all-MiniLM-L6-v2")
+def get_openai_client():
+    """Get OpenAI client for embeddings."""
+    return OpenAI(api_key=settings.OPENAI_API_KEY)
+
+def create_embedding(text):
+    """Create embeddings using OpenAI API."""
+    client = get_openai_client()
+    response = client.embeddings.create(
+        input=text,
+        model="text-embedding-3-small"
+    )
+    return np.array(response.data[0].embedding)
 
 
 def extract_text_from_pdf(file_path):
@@ -85,7 +92,6 @@ def chunk_text(text, chunk_size=1000, overlap=100):
 
 def create_embeddings(document, chunks):
     """Create embeddings for document chunks."""
-    model = load_embedding_model()
     embeddings = []
     
     # Delete existing embeddings for this document
@@ -93,7 +99,7 @@ def create_embeddings(document, chunks):
     
     # Create new embeddings
     for i, chunk in enumerate(chunks):
-        embedding = model.encode(chunk)
+        embedding = create_embedding(chunk)
         
         # Save embedding to database
         DocumentEmbedding.objects.create(
@@ -110,8 +116,7 @@ def create_embeddings(document, chunks):
 
 def search_document(document, query, top_k=3):
     """Search the document for relevant chunks based on query."""
-    model = load_embedding_model()
-    query_embedding = model.encode(query)
+    query_embedding = create_embedding(query)
     
     # Get all embeddings for this document
     db_embeddings = DocumentEmbedding.objects.filter(document=document).order_by('chunk_index')
